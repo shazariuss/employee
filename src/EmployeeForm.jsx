@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const EmployeeForm = () => {
+  const SERVER_URL = 'https://employee-api-gold.vercel.app/'
   const [formData, setFormData] = useState({
     full_name: '',
     dob: '',
@@ -42,7 +43,7 @@ const EmployeeForm = () => {
 
   const fetchReferenceData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/reference-data');
+      const response = await axios.get(`${SERVER_URL}/reference-data`);
       setReferenceData(response.data);
     } catch (error) {
       console.error('Error fetching reference data:', error);
@@ -167,7 +168,7 @@ const EmployeeForm = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await axios.post('http://localhost:5000/employees', formData);
+        const response = await axios.post(`${SERVER_URL}/employees`, formData);
         console.log(response.data);
         alert('Сотрудник успешно добавлен');
         // Reset form or redirect to employee list
@@ -247,7 +248,6 @@ const EmployeeForm = () => {
           <input
             placeholder='AC1234567'
             name="passport_number"
-            maxLength="9"
             value={formData.passport_number}
             onChange={handleChange}
             required
@@ -273,7 +273,6 @@ const EmployeeForm = () => {
           <label className="block font-medium">Электронная почта:</label>
           <input
             placeholder='example@gmail.com'
-            type='email'
             name="email"
             value={formData.email}
             onChange={handleChange}

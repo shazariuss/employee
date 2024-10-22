@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const EmployeeSearch = () => {
+  const SERVER_URL = 'https://employee-api-gold.vercel.app/'
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -14,7 +15,7 @@ const EmployeeSearch = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/employees/search?query=${searchQuery}`);
+      const response = await axios.get(`${SERVER_URL}/employees/search?query=${searchQuery}`);
       setSearchResults(response.data);
     } catch (error) {
       console.error('Search error:', error);
@@ -23,7 +24,7 @@ const EmployeeSearch = () => {
 
   const handleView = async (employeeId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/employees/${employeeId}`);
+      const response = await axios.get(`${SERVER_URL}/employees/${employeeId}`);
       setSelectedEmployee(response.data);
       setViewModalVisible(true);
     } catch (error) {
@@ -33,7 +34,7 @@ const EmployeeSearch = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/employees/${selectedEmployee.id}`);
+      await axios.delete(`${SERVER_URL}/employees/${selectedEmployee.id}`);
       setDeleteModalVisible(false);
       setSearchResults(searchResults.filter(emp => emp.id !== selectedEmployee.id));
     } catch (error) {

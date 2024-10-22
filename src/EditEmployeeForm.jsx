@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const EditEmployeeForm = () => {
+    const SERVER_URL = 'https://employee-api-gold.vercel.app/'
     const [formData, setFormData] = useState({
         full_name: '',
         dob: '',
@@ -47,7 +48,7 @@ const EditEmployeeForm = () => {
     
       const fetchEmployeeData = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/employees/${id}`);
+          const response = await axios.get(`${SERVER_URL}/${id}`);
           const employeeData = response.data;
           setFormData({
             ...employeeData,
@@ -70,7 +71,7 @@ const EditEmployeeForm = () => {
     
       const fetchReferenceData = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/reference-data');
+          const response = await axios.get(`${SERVER_URL}/reference-data`);
           setReferenceData(response.data);
         } catch (error) {
           console.error('Error fetching reference data:', error);
@@ -194,7 +195,7 @@ const EditEmployeeForm = () => {
         e.preventDefault();
         if (validateForm()) {
           try {
-            const response = await axios.put(`http://localhost:5000/employees/${id}`, formData);
+            const response = await axios.put(`${SERVER_URL}/employees/${id}`, formData);
             
             if (response.data.success) {
               alert('Данные сотрудника успешно обновлены');
@@ -273,7 +274,6 @@ const EditEmployeeForm = () => {
           <label className="block font-medium">Номер паспорта:</label>
           <input
             name="passport_number"
-            maxLength="9"
             value={formData.passport_number}
             onChange={handleChange}
             required
@@ -298,7 +298,6 @@ const EditEmployeeForm = () => {
           <label className="block font-medium">Электронная почта:</label>
           <input
             name="email"
-            type='email'
             value={formData.email}
             onChange={handleChange}
             required
