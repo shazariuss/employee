@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Table, Input, Button, Modal, Space, Card, Descriptions } from 'antd';
+import { Table, Input, Button, Modal, Space, Card, Descriptions, Row, Col } from 'antd';
 import { SearchOutlined, EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const EmployeeSearch = () => {
-  const SERVER_URL = 'https://employee-api-gold.vercel.app'
+  const SERVER_URL = 'https://employee-api-gold.vercel.app';
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -48,20 +48,20 @@ const EmployeeSearch = () => {
 
   const columns = [
     {
-        title: 'ФИО',
-        dataIndex: 'full_name',
-        key: 'full_name',
-      },
-      {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
-      },
-      {
-        title: 'Телефон',
-        dataIndex: 'phone_number',
-        key: 'phone_number',
-      },
+      title: 'ФИО',
+      dataIndex: 'full_name',
+      key: 'full_name',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Телефон',
+      dataIndex: 'phone_number',
+      key: 'phone_number',
+    },
     {
       title: 'Действия',
       key: 'actions',
@@ -101,24 +101,30 @@ const EmployeeSearch = () => {
   return (
     <div style={{ padding: '24px' }}>
       <Card>
-        <Space style={{ marginBottom: 16 }}>
-          <Input
-            placeholder="Поиск по ФИО, паспорту, телефону, email или университету"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ width: 400 }}
-            prefix={<SearchOutlined />}
-          />
-          <Button type="primary" onClick={handleSearch}>
-            Поиск
-          </Button>
-        </Space>
+        <Row gutter={[16, 16]} align="middle" justify="space-between">
+          <Col xs={24} md={16}>
+            <Input
+              placeholder="Поиск по ФИО, паспорту, телефону, email или университету"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ width: '100%' }}
+              prefix={<SearchOutlined />}
+              size="large"
+            />
+          </Col>
+          <Col xs={24} md={8}>
+            <Button type="primary" onClick={handleSearch} size="large" block>
+              Поиск
+            </Button>
+          </Col>
+        </Row>
 
         <Table
           columns={columns}
           dataSource={searchResults}
           rowKey="id"
           pagination={{ pageSize: 10 }}
+          scroll={{ x: 400 }} // Add horizontal scroll for smaller screens
         />
 
         {/* View Modal */}
@@ -127,11 +133,11 @@ const EmployeeSearch = () => {
           open={viewModalVisible}
           onCancel={() => setViewModalVisible(false)}
           footer={null}
-          width={800}
+          width={window.innerWidth < 768 ? '100%' : 800} // Responsive width
         >
           {selectedEmployee && (
-            <Descriptions column={2} bordered>
-              <Descriptions.Item label="ФИО" span={2}>
+            <Descriptions column={1} bordered>
+              <Descriptions.Item label="ФИО">
                 {selectedEmployee.full_name}
               </Descriptions.Item>
               <Descriptions.Item label="Дата рождения">
@@ -152,16 +158,16 @@ const EmployeeSearch = () => {
               <Descriptions.Item label="Телефон">
                 {selectedEmployee.phone_number}
               </Descriptions.Item>
-              <Descriptions.Item label="Адрес" span={2}>
+              <Descriptions.Item label="Адрес">
                 {`${selectedEmployee.country}, ${selectedEmployee.city}, ${selectedEmployee.street_address}`}
               </Descriptions.Item>
-              <Descriptions.Item label="Образование" span={2}>
+              <Descriptions.Item label="Образование">
                 {selectedEmployee.education?.university}, {selectedEmployee.education?.degree}, {selectedEmployee.education?.graduation_year}
               </Descriptions.Item>
-              <Descriptions.Item label="Опыт работы" span={2}>
+              <Descriptions.Item label="Опыт работы">
                 {selectedEmployee.experience?.company_name}, {selectedEmployee.experience?.job_title}, {selectedEmployee.experience?.years_of_experience} лет
               </Descriptions.Item>
-              <Descriptions.Item label="Экстренный контакт" span={2}>
+              <Descriptions.Item label="Экстренный контакт">
                 {selectedEmployee.emergency_contact?.contact_name}, {selectedEmployee.emergency_contact?.relationship}, {selectedEmployee.emergency_contact?.phone_number}
               </Descriptions.Item>
             </Descriptions>
