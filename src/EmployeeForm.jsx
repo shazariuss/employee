@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const EmployeeForm = () => {
-  const SERVER_URL = 'https://employee-api-gold.vercel.app/'
+  const SERVER_URL = 'https://employee-api-gold.vercel.app'
   const [formData, setFormData] = useState({
     full_name: '',
     dob: '',

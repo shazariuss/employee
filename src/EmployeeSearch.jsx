@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const EmployeeSearch = () => {
-  const SERVER_URL = 'https://employee-api-gold.vercel.app/'
+  const SERVER_URL = 'https://employee-api-gold.vercel.app'
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
