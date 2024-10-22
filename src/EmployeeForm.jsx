@@ -187,7 +187,7 @@ const EmployeeForm = () => {
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold mb-6 text-center">Форма регистрации сотрудника</h2>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
           <label className="block font-medium">ФИО:</label>
           <input
