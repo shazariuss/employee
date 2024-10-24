@@ -30,12 +30,15 @@ const EmployeeForm = () => {
     emergency_contact_number: ''
   });
 
+  const currentYear = new Date().getFullYear();
+  const newErrors = {};
   const [errors, setErrors] = useState({});
   const [referenceData, setReferenceData] = useState({
     departments: [],
     positions: [],
     employmentTypes: []
   });
+
 
   useEffect(() => {
     fetchReferenceData();
@@ -52,121 +55,261 @@ const EmployeeForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const newErrors = { ...errors };
 
+    
+    if (name === 'full_name') {
+      if (/^[A-Za-z\s]*$/.test(value)) {
 
-  const validateForm = () => {
-    const newErrors = {};
-    const currentYear = new Date().getFullYear();
+        if (!/\s\s/.test(value)) {
+          setFormData({ ...formData, [name]: value });
+          if (value.length < 3) {
+            newErrors[name] = 'ФИО должно содержать не менее 3 символов.';
+          } else {
+            delete newErrors[name];
+          }
+        }
+      }
+    } 
 
-    if (!formData.full_name || formData.full_name.length < 3) {
-      newErrors.full_name = 'ФИО должно содержать не менее 3 символов.';
+    else if (name === 'dob') {
+      setFormData({ ...formData, [name]: value });
+      const dobYear = new Date(value).getFullYear();
+      if (!value || currentYear - dobYear < 18) {
+        newErrors[name] = 'Сотрудник должен быть старше 18 лет.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    const dobYear = new Date(formData.dob).getFullYear();
-    if (!formData.dob || currentYear - dobYear < 18) {
-      newErrors.dob = 'Сотрудник должен быть старше 18 лет.';
+    else if (name === 'gender') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Пол обязателен для заполнения.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.gender) {
-      newErrors.gender = 'Пол обязателен для заполнения.';
+    else if (name === 'nationality') {
+      if (/^[A-Za-z]*$/.test(value)) {
+        setFormData({ ...formData, [name]: value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() });
+        if (!value) {
+          newErrors[name] = 'Укажите национальность.';
+        } else {
+          delete newErrors[name];
+        }
+      }
+    } 
+    else if (name === 'passport_number') {
+      if (value.length <= 2) {
+        if (/^[A-Za-z]{0,2}$/.test(value)) {
+          setFormData({...formData, [name]: value.toUpperCase()});
+        }
+      } 
+      else if (value.length <= 9 && /^[A-Z]{2}\d{0,7}$/.test(value)) {
+        setFormData({...formData, [name]: value});
+      }
+      if (value.length !== 9) {
+        newErrors[name] = 'Номер паспорта должен состоять из 9 символов.';
+      } else {
+        delete newErrors[name];
+      }
+    }
+    else if (name === 'phone_number') {
+      if (/^[0-9]*$/.test(value)) {
+        setFormData({ ...formData, [name]: value });
+      }
+
+      if (value.length < 12) {
+          newErrors[name] = 'Номер телефона должен содержать не менее 12 цифр и без +.';
+      } else {
+          delete newErrors[name];
+      }
+      }
+    else if (name === 'email') {
+      setFormData({ ...formData, [name]: value });
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        newErrors[name] = 'Неверный формат электронной почты.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.nationality) {
-      newErrors.nationality = 'Укажите национальность.';
+    else if (name === 'country') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Укажите страну.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.passport_number || formData.passport_number.length !== 9) {
-      newErrors.passport_number = 'Номер паспорта должен состоять из 9 символов.';
+    else if (name === 'city') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Укажите город.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    const phoneNumberRegex = /^\d{7,}$/;
-    if (!phoneNumberRegex.test(formData.phone_number)) {
-      newErrors.phone_number = 'Номер телефона должен содержать не менее 7 цифр и без +.';
+    else if (name === 'postal_code') {
+      if (/^[0-9]*$/.test(value)) {
+        setFormData({ ...formData, [name]: value });
+      }
+
+      if (value.length < 5) {
+        newErrors[name] = 'Почтовый индекс должен содержать не менее 5 символов.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Неверный формат электронной почты.';
+    else if (name === 'street_address') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Укажите адрес.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.country) {
-      newErrors.country = 'Укажите страну.';
+    else if (name === 'department_id') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Выберите отдел.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.city) {
-      newErrors.city = 'Укажите город.';
+    else if (name === 'position_id') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Выберите должность.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.postal_code || formData.postal_code.length < 5) {
-      newErrors.postal_code = 'Почтовый индекс должен содержать не менее 5 символов.';
+    else if (name === 'employment_type_id') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Выберите тип занятости.';
+      } else {
+        delete newErrors[name];
+      }
+    }
+    
+    else if (name === 'employment_date') {
+      setFormData({ ...formData, [name]: value });
+      const employmentDate = new Date(value);
+      if (!value || employmentDate > new Date()) {
+        newErrors[name] = 'Дата приема на работу должна быть в прошлом.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.street_address) {
-      newErrors.street_address = 'Укажите адрес.';
+    else if (name === 'degree') {
+      if (/^[A-Za-z\s]*$/.test(value)) {
+        setFormData({ ...formData, [name]: value });
+      }
+      if (!value) {
+        newErrors[name] = 'Укажите уровень образования.';
+      } else {
+        delete newErrors[name];
+      }
+    }
+    
+    else if (name === 'university') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Укажите учебное заведение.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.department_id) {
-      newErrors.department_id = 'Выберите отдел.';
+    else if (name === 'graduation_year') {
+      setFormData({ ...formData, [name]: value });
+            
+      if (!value || isNaN(value) || value > currentYear || value < 1950 || value <= 0) {
+
+        newErrors[name] = 'Укажите корректный год окончания.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.position_id) {
-      newErrors.position_id = 'Выберите должность.';
+    else if (name === 'prev_company') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Укажите предыдущую компанию.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.employment_type_id) {
-      newErrors.employment_type_id = 'Выберите тип занятости.';
+    else if (name === 'job_title') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Укажите предыдущую должность.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    const employmentDate = new Date(formData.employment_date);
-    if (!formData.employment_date || employmentDate > new Date()) {
-      newErrors.employment_date = 'Дата приема на работу должна быть в прошлом.';
+    else if (name === 'experience_years') {
+      setFormData({ ...formData, [name]: value });
+      if (!value || isNaN(value) || value < 0) {
+        newErrors[name] = 'Укажите корректное количество лет опыта.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.degree) {
-      newErrors.degree = 'Укажите уровень образования.';
+    else if (name === 'emergency_contact_name') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Укажите контактное лицо.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.university) {
-      newErrors.university = 'Укажите учебное заведение.';
+    else if (name === 'emergency_contact_relationship') {
+      setFormData({ ...formData, [name]: value });
+      if (!value) {
+        newErrors[name] = 'Укажите отношение к контактному лицу.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.graduation_year || isNaN(formData.graduation_year) || formData.graduation_year > currentYear) {
-      newErrors.graduation_year = 'Укажите корректный год окончания.';
+    else if (name === 'emergency_contact_number') {
+      if (/^[0-9]*$/.test(value)) {
+        setFormData({ ...formData, [name]: value });
+      }
+      if (value.length < 12) {
+        newErrors[name] = 'Номер телефона контактного лица должен содержать не менее 12 цифр и без +.';
+      } else {
+        delete newErrors[name];
+      }
     }
 
-    if (!formData.prev_company) {
-      newErrors.prev_company = 'Укажите предыдущую компанию.';
+    else {
+      setFormData({ ...formData, [name]: value });
     }
-
-    if (!formData.job_title) {
-      newErrors.job_title = 'Укажите предыдущую должность.';
-    }
-
-    if (!formData.experience_years || isNaN(formData.experience_years) || formData.experience_years < 0) {
-      newErrors.experience_years = 'Укажите корректное количество лет опыта.';
-    }
-
-    if (!formData.emergency_contact_name) {
-      newErrors.emergency_contact_name = 'Укажите контактное лицо.';
-    }
-
-    if (!formData.emergency_contact_relationship) {
-      newErrors.emergency_contact_relationship = 'Укажите отношение к контактному лицу.';
-    }
-
-    if (!phoneNumberRegex.test(formData.emergency_contact_number)) {
-      newErrors.emergency_contact_number = 'Номер телефона контактного лица должен содержать не менее 7 цифр и без +.';
-    }
-
+    
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    if (Object.keys(newErrors).length === 0) {
       try {
         const response = await axios.post(`${SERVER_URL}/employees`, formData);
         console.log(response.data);
@@ -193,6 +336,7 @@ const EmployeeForm = () => {
           <input
             placeholder='Иванов Иван Иванович'
             name="full_name"
+            maxLength="50"
             value={formData.full_name}
             onChange={handleChange}
             required
@@ -248,6 +392,7 @@ const EmployeeForm = () => {
           <input
             placeholder='AC1234567'
             name="passport_number"
+            maxLength="9"
             value={formData.passport_number}
             onChange={handleChange}
             required
@@ -260,6 +405,7 @@ const EmployeeForm = () => {
           <label className="block font-medium">Номер телефона:</label>
           <input
             placeholder='998901234567'
+            maxLength="12"
             name="phone_number"
             value={formData.phone_number}
             onChange={handleChange}
@@ -312,6 +458,7 @@ const EmployeeForm = () => {
           <label className="block font-medium">Почтовый индекс:</label>
           <input
             placeholder='100500'
+            maxLength="6"
             name="postal_code"
             value={formData.postal_code}
             onChange={handleChange}
@@ -506,6 +653,7 @@ const EmployeeForm = () => {
           <label className="block font-medium">Телефон контактного лица:</label>
           <input
             placeholder='998901234567'
+            maxLength="12"
             name="emergency_contact_number"
             value={formData.emergency_contact_number}
             onChange={handleChange}
