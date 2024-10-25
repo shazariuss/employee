@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const EditEmployeeForm = () => {
-    const SERVER_URL = 'https://employee-api-gold.vercel.app'
+  const SERVER_URL = 'https://employee-api-gold.vercel.app'
     const [formData, setFormData] = useState({
         full_name: '',
         dob: '',
