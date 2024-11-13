@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-import { 
-  Table, Input, Button, Modal, Space, Card, 
-  Descriptions, Row, Col, Select, Form 
-} from 'antd';
-import { 
-  SearchOutlined, EditOutlined, 
-  DeleteOutlined, EyeOutlined 
-} from '@ant-design/icons';
+import { Table, Input, Button, Modal, Space, Card, Descriptions, Row, Col, Select, Form } from 'antd';
+import { SearchOutlined, EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
@@ -14,7 +8,7 @@ import Header from './Header';
 const { Option } = Select;
 
 const EmployeeSearch = () => {
-  const SERVER_URL = 'https://employee-api-gold.vercel.app'
+  const SERVER_URL = 'https://employee-api-gold.vercel.app';
   const [searchParams, setSearchParams] = useState({
     field: 'full_name',
     value: ''
@@ -49,8 +43,6 @@ const EmployeeSearch = () => {
         `${SERVER_URL}/employees/search?field=${searchParams.field}&value=${searchParams.value}`
       );
       setSearchResults(response.data);
-      console.log('working');
-      
     } catch (error) {
       console.error('Search error:', error);
     }
@@ -82,37 +74,121 @@ const EmployeeSearch = () => {
 
   const columns = [
     {
-      title: 'ФИО',
+      title: (
+        <div>
+          <label htmlFor="full-name-input">ФИО:</label>
+          <Input
+            id="full-name-input"
+            placeholder="Введите наименование"
+            style={{ width: '100%' }}
+            onChange={(e) =>
+              setSearchParams((prev) => ({ ...prev, field: 'full_name', value: e.target.value }))
+            }
+          />
+        </div>
+      ),
       dataIndex: 'full_name',
       key: 'full_name',
     },
     {
-      title: 'Email',
+      title: (
+        <div>
+          <label htmlFor="email-input">Email:</label>
+          <Input
+            id="email-input"
+            placeholder="Введите email"
+            style={{ width: '100%' }}
+            onChange={(e) =>
+              setSearchParams((prev) => ({ ...prev, field: 'email', value: e.target.value }))
+            }
+          />
+        </div>
+      ),
       dataIndex: 'email',
       key: 'email',
     },
     {
-      title: 'Телефон',
+      title: (
+        <div>
+          <label htmlFor="phone-input">Телефон:</label>
+          <Input
+            id="phone-input"
+            placeholder="Введите телефон"
+            style={{ width: '100%' }}
+            onChange={(e) =>
+              setSearchParams((prev) => ({ ...prev, field: 'phone_number', value: e.target.value }))
+            }
+          />
+        </div>
+      ),
       dataIndex: 'phone_number',
       key: 'phone_number',
     },
     {
-      title: 'Должность',
+      title: (
+        <div>
+          <label htmlFor="position-input">Должность:</label>
+          <Input
+            id="position-input"
+            placeholder="Введите должность"
+            style={{ width: '100%' }}
+            onChange={(e) =>
+              setSearchParams((prev) => ({ ...prev, field: 'position_name', value: e.target.value }))
+            }
+          />
+        </div>
+      ),
       dataIndex: 'position_name',
       key: 'position_name',
     },
     {
-      title: 'Отдел',
+      title: (
+        <div>
+          <label htmlFor="department-input">Отдел:</label>
+          <Input
+            id="department-input"
+            placeholder="Введите отдел"
+            style={{ width: '100%' }}
+            onChange={(e) =>
+              setSearchParams((prev) => ({ ...prev, field: 'department_name', value: e.target.value }))
+            }
+          />
+        </div>
+      ),
       dataIndex: 'department_name',
       key: 'department_name',
     },
     {
-      title: 'Город',
+      title: (
+        <div>
+          <label htmlFor="city-input">Город:</label>
+          <Input
+            id="city-input"
+            placeholder="Введите город"
+            style={{ width: '100%' }}
+            onChange={(e) =>
+              setSearchParams((prev) => ({ ...prev, field: 'city', value: e.target.value }))
+            }
+          />
+        </div>
+      ),
       dataIndex: 'city',
       key: 'city',
     },
     {
-      title: 'Тип занятости',
+      title: (
+        <div>
+          <label htmlFor="employment-type-input">Тип занятости:</label>
+          <Input
+            id="employment-type-input"
+            placeholder="Введите тип занятости"
+            style={{ width: '100%' }}
+            onChange={(e) =>
+              setSearchParams((prev) => ({ ...prev, field: 'employment_type_name', value: e.target.value }))
+            }
+          />
+        </div>
+      ),
       dataIndex: 'employment_type_name',
       key: 'employment_type_name',
     },
@@ -122,28 +198,28 @@ const EmployeeSearch = () => {
       width: 200,
       render: (_, record) => (
         <Space>
-          <Button 
-            icon={<EyeOutlined />} 
+          <Button
+            icon={<EyeOutlined />}
             onClick={() => handleView(record.id)}
             type="primary"
             ghost
           >
             Просмотр
           </Button>
-          <Button 
+          <Button
             icon={<EditOutlined />}
             onClick={() => handleEdit(record.id)}
             type="primary"
           >
             Изменить
           </Button>
-          <Button 
+          <Button
             icon={<DeleteOutlined />}
             onClick={() => {
               setSelectedEmployee(record);
               setDeleteModalVisible(true);
             }}
-            type="primary" 
+            type="primary"
             danger
           >
             Удалить
@@ -155,8 +231,8 @@ const EmployeeSearch = () => {
 
   return (
     <>
-      <Header link={''} text={"Добавить сотрудника"}/>
-      <div className="p-6" style={{marginTop:'70px'}}>
+      <Header link={''} text={"Добавить сотрудника"} />
+      <div className="p-6" style={{ marginTop: '70px' }}>
         <Card>
           <Form layout="vertical">
             <Row gutter={[16, 16]} align="bottom" style={{ display: 'flex', alignItems: 'center' }}>
@@ -185,8 +261,8 @@ const EmployeeSearch = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={4} style={{ transform: 'translateY(10%)'}}>
-                <Button type="primary" onClick={handleSearch} block >
+              <Col xs={24} md={4} style={{ transform: 'translateY(10%)' }}>
+                <Button type="primary" onClick={handleSearch} block>
                   Поиск
                 </Button>
               </Col>
