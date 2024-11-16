@@ -329,9 +329,7 @@ const EmployeeForm = () => {
 
   return (
     <>
-      <Header link={'search'} text={"Поиск сотруддника"}/>
       <form onSubmit={handleSubmit} 
-      style={{marginTop:'70px'}}
       className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">Форма регистрации сотрудника</h2>
 

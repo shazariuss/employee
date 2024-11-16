@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Button } from 'antd';
 
 const EditEmployeeForm = () => {
   const SERVER_URL = 'https://employee-api-gold.vercel.app'
@@ -358,349 +359,355 @@ const EditEmployeeForm = () => {
       };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-center">Редактирование данных сотрудника</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-          <label className="block font-medium">ФИО:</label>
-          <input
-            placeholder='Иванов Иван Иванович'
-            name="full_name"
-            maxLength="50"
-            value={formData.full_name}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.full_name && <p className="text-red-500 text-sm">{errors.full_name}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Дата рождения:</label>
-          <input
-            type="date"
-            name="dob"
-            value={formData.dob}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Пол:</label>
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg">
+      <Button
+            type="primary"
+            onClick={() => navigate(-1)}  // This will take you to the previous page
           >
-            <option value="">Выберите пол</option>
-            <option value="Мужской">Мужской</option>
-            <option value="Женский">Женский</option>
-          </select>
-          {errors.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
+            Назад
+      </Button>
+        <h2 className="text-2xl font-bold mb-6 text-center">Редактирование данных сотрудника</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label className="block font-medium">ФИО:</label>
+            <input
+              placeholder='Иванов Иван Иванович'
+              name="full_name"
+              maxLength="50"
+              value={formData.full_name}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.full_name && <p className="text-red-500 text-sm">{errors.full_name}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Дата рождения:</label>
+            <input
+              type="date"
+              name="dob"
+              value={formData.dob}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Пол:</label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            >
+              <option value="">Выберите пол</option>
+              <option value="Мужской">Мужской</option>
+              <option value="Женский">Женский</option>
+            </select>
+            {errors.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Национальность:</label>
+            <input
+              placeholder='Узбек'
+              name="nationality"
+              value={formData.nationality}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.nationality && <p className="text-red-500 text-sm">{errors.nationality}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Номер паспорта:</label>
+            <input
+              placeholder='AC1234567'
+              name="passport_number"
+              maxLength="9"
+              value={formData.passport_number}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.passport_number && <p className="text-red-500 text-sm">{errors.passport_number}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Номер телефона:</label>
+            <input
+              placeholder='998901234567'
+              maxLength="12"
+              name="phone_number"
+              value={formData.phone_number}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.phone_number && <p className="text-red-500 text-sm">{errors.phone_number}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Электронная почта:</label>
+            <input
+              placeholder='example@gmail.com'
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Страна:</label>
+            <input
+              placeholder='Узбекистан'
+              name="country"
+              value={formData.country}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Город:</label>
+            <input
+              placeholder='Ташкент'
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Почтовый индекс:</label>
+            <input
+              placeholder='100500'
+              maxLength="6"
+              name="postal_code"
+              value={formData.postal_code}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.postal_code && <p className="text-red-500 text-sm">{errors.postal_code}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Адрес:</label>
+            <input
+              placeholder='Амир Темур 5А'
+              name="street_address"
+              value={formData.street_address}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.street_address && <p className="text-red-500 text-sm">{errors.street_address}</p>}
+          </div>
+          <div>
+            <label className="block font-medium">Дата приема на работу:</label>
+            <input
+              type="date"
+              name="employment_date"
+              value={formData.employment_date}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.employment_date && <p className="text-red-500 text-sm">{errors.employment_date}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Отдел:</label>
+            <select
+              name="department_id"
+              value={formData.department_id}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            >
+              <option value="">Выберите отдел</option>
+              {referenceData.departments.map((dept) => (
+                <option key={dept.id} value={dept.id}>{dept.name}</option>
+              ))}
+            </select>
+            {errors.department_id && <p className="text-red-500 text-sm">{errors.department_id}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Должность:</label>
+            <select
+              name="position_id"
+              value={formData.position_id}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            >
+              <option value="">Выберите должность</option>
+              {referenceData.positions.map((position) => (
+                <option key={position.id} value={position.id}>{position.name}</option>
+              ))}
+            </select>
+            {errors.position_id && <p className="text-red-500 text-sm">{errors.position_id}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Тип занятости:</label>
+            <select
+              name="employment_type_id"
+              value={formData.employment_type_id}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            >
+              <option value="">Выберите тип занятости</option>
+              {referenceData.employmentTypes.map((type) => (
+                <option key={type.id} value={type.id}>{type.name}</option>
+              ))}
+            </select>
+            {errors.employment_type_id && <p className="text-red-500 text-sm">{errors.employment_type_id}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Уровень образования:</label>
+            <input
+              placeholder='Высшее, Среднее'
+              name="degree"
+              value={formData.degree}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.degree && <p className="text-red-500 text-sm">{errors.degree}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Учебное заведение:</label>
+            <input
+              placeholder='ТУИТ'
+              name="university"
+              value={formData.university}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.university && <p className="text-red-500 text-sm">{errors.university}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Год окончания:</label>
+            <input
+              name="graduation_year"
+              value={formData.graduation_year}
+              onChange={handleChange}
+              required
+              type="number"
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.graduation_year && <p className="text-red-500 text-sm">{errors.graduation_year}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Предыдущая компания:</label>
+            <input
+              placeholder='NBU'
+              name="prev_company"
+              value={formData.prev_company}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.prev_company && <p className="text-red-500 text-sm">{errors.prev_company}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Предыдущая должность:</label>
+            <input
+              placeholder='Старшый программист'
+              name="job_title"
+              value={formData.job_title}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.job_title && <p className="text-red-500 text-sm">{errors.job_title}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Опыт работы (лет):</label>
+            <input
+              placeholder='2'
+              name="experience_years"
+              value={formData.experience_years}
+              onChange={handleChange}
+              required
+              type="number"
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.experience_years && <p className="text-red-500 text-sm">{errors.experience_years}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Имя контактного лица в экстренной ситуации(ФИО):</label>
+            <input
+              placeholder='Олег Олегов Олегович'
+              name="emergency_contact_name"
+              value={formData.emergency_contact_name}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.emergency_contact_name && <p className="text-red-500 text-sm">{errors.emergency_contact_name}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Кем является этот человек:</label>
+            <input
+              placeholder='Брат, Отец, т.д'
+              name="emergency_contact_relationship"
+              value={formData.emergency_contact_relationship}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.emergency_contact_relationship && <p className="text-red-500 text-sm">{errors.emergency_contact_relationship}</p>}
+          </div>
+
+          <div>
+            <label className="block font-medium">Телефон контактного лица:</label>
+            <input
+              placeholder='998901234567'
+              maxLength="12"
+              name="emergency_contact_number"
+              value={formData.emergency_contact_number}
+              onChange={handleChange}
+              required
+              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+            />
+            {errors.emergency_contact_number && <p className="text-red-500 text-sm">{errors.emergency_contact_number}</p>}
+          </div>
         </div>
 
-        <div>
-          <label className="block font-medium">Национальность:</label>
-          <input
-            placeholder='Узбек'
-            name="nationality"
-            value={formData.nationality}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.nationality && <p className="text-red-500 text-sm">{errors.nationality}</p>}
+        <div className="mt-6">
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+            Обновить данные
+          </button>
         </div>
-
-        <div>
-          <label className="block font-medium">Номер паспорта:</label>
-          <input
-            placeholder='AC1234567'
-            name="passport_number"
-            maxLength="9"
-            value={formData.passport_number}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.passport_number && <p className="text-red-500 text-sm">{errors.passport_number}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Номер телефона:</label>
-          <input
-            placeholder='998901234567'
-            maxLength="12"
-            name="phone_number"
-            value={formData.phone_number}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.phone_number && <p className="text-red-500 text-sm">{errors.phone_number}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Электронная почта:</label>
-          <input
-            placeholder='example@gmail.com'
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Страна:</label>
-          <input
-            placeholder='Узбекистан'
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Город:</label>
-          <input
-            placeholder='Ташкент'
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Почтовый индекс:</label>
-          <input
-            placeholder='100500'
-            maxLength="6"
-            name="postal_code"
-            value={formData.postal_code}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.postal_code && <p className="text-red-500 text-sm">{errors.postal_code}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Адрес:</label>
-          <input
-            placeholder='Амир Темур 5А'
-            name="street_address"
-            value={formData.street_address}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.street_address && <p className="text-red-500 text-sm">{errors.street_address}</p>}
-        </div>
-        <div>
-          <label className="block font-medium">Дата приема на работу:</label>
-          <input
-            type="date"
-            name="employment_date"
-            value={formData.employment_date}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.employment_date && <p className="text-red-500 text-sm">{errors.employment_date}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Отдел:</label>
-          <select
-            name="department_id"
-            value={formData.department_id}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          >
-            <option value="">Выберите отдел</option>
-            {referenceData.departments.map((dept) => (
-              <option key={dept.id} value={dept.id}>{dept.name}</option>
-            ))}
-          </select>
-          {errors.department_id && <p className="text-red-500 text-sm">{errors.department_id}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Должность:</label>
-          <select
-            name="position_id"
-            value={formData.position_id}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          >
-            <option value="">Выберите должность</option>
-            {referenceData.positions.map((position) => (
-              <option key={position.id} value={position.id}>{position.name}</option>
-            ))}
-          </select>
-          {errors.position_id && <p className="text-red-500 text-sm">{errors.position_id}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Тип занятости:</label>
-          <select
-            name="employment_type_id"
-            value={formData.employment_type_id}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          >
-            <option value="">Выберите тип занятости</option>
-            {referenceData.employmentTypes.map((type) => (
-              <option key={type.id} value={type.id}>{type.name}</option>
-            ))}
-          </select>
-          {errors.employment_type_id && <p className="text-red-500 text-sm">{errors.employment_type_id}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Уровень образования:</label>
-          <input
-            placeholder='Высшее, Среднее'
-            name="degree"
-            value={formData.degree}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.degree && <p className="text-red-500 text-sm">{errors.degree}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Учебное заведение:</label>
-          <input
-            placeholder='ТУИТ'
-            name="university"
-            value={formData.university}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.university && <p className="text-red-500 text-sm">{errors.university}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Год окончания:</label>
-          <input
-            name="graduation_year"
-            value={formData.graduation_year}
-            onChange={handleChange}
-            required
-            type="number"
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.graduation_year && <p className="text-red-500 text-sm">{errors.graduation_year}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Предыдущая компания:</label>
-          <input
-            placeholder='NBU'
-            name="prev_company"
-            value={formData.prev_company}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.prev_company && <p className="text-red-500 text-sm">{errors.prev_company}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Предыдущая должность:</label>
-          <input
-            placeholder='Старшый программист'
-            name="job_title"
-            value={formData.job_title}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.job_title && <p className="text-red-500 text-sm">{errors.job_title}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Опыт работы (лет):</label>
-          <input
-            placeholder='2'
-            name="experience_years"
-            value={formData.experience_years}
-            onChange={handleChange}
-            required
-            type="number"
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.experience_years && <p className="text-red-500 text-sm">{errors.experience_years}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Имя контактного лица в экстренной ситуации(ФИО):</label>
-          <input
-            placeholder='Олег Олегов Олегович'
-            name="emergency_contact_name"
-            value={formData.emergency_contact_name}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.emergency_contact_name && <p className="text-red-500 text-sm">{errors.emergency_contact_name}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Кем является этот человек:</label>
-          <input
-            placeholder='Брат, Отец, т.д'
-            name="emergency_contact_relationship"
-            value={formData.emergency_contact_relationship}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.emergency_contact_relationship && <p className="text-red-500 text-sm">{errors.emergency_contact_relationship}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium">Телефон контактного лица:</label>
-          <input
-            placeholder='998901234567'
-            maxLength="12"
-            name="emergency_contact_number"
-            value={formData.emergency_contact_number}
-            onChange={handleChange}
-            required
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-          />
-          {errors.emergency_contact_number && <p className="text-red-500 text-sm">{errors.emergency_contact_number}</p>}
-        </div>
-      </div>
-
-      <div className="mt-6">
-        <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
-          Обновить данные
-        </button>
-      </div>
-    </form>
+      </form>
   );
 };
 
