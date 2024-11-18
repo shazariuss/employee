@@ -22,7 +22,6 @@ const EmployeeSearch = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch all employees initially
   useEffect(() => {
     async function fetchData() {
       try {
@@ -36,12 +35,10 @@ const EmployeeSearch = () => {
     fetchData();
   }, []);
 
-  // Filter logic
   useEffect(() => {
     const filterEmployees = () => {
       let results = allEmployees;
       
-      // Apply all active filters
       Object.entries(filters).forEach(([key, value]) => {
         if (value) {
           results = results.filter(employee => {
@@ -240,7 +237,7 @@ const EmployeeSearch = () => {
           columns={columns}
           dataSource={filteredEmployees}
           rowKey="id"
-          pagination={{ pageSize: 10 }}
+          pagination={{ pageSize: 10, position:['bottomCenter'] }}
           scroll={{ x: 1300 }}
           className="mt-5"
           rowClassName="custom-row"
