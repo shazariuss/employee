@@ -396,10 +396,10 @@ const EmployeeSearch = () => {
             </div>
           }
           width={800}
-          style={{transform:'translateY(-5%)'}}
+          style={{transform:'translateY(-10%)'}}
         >
           {selectedEmployee && (
-            <Descriptions column={1} bordered>
+            <Descriptions column={1} bordered size='small'>
               <Descriptions.Item label="ФИО">
                 {selectedEmployee.full_name}
               </Descriptions.Item>
