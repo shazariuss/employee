@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu, Button, Affix } from 'antd';
 import { 
   UserAddOutlined, 
   TeamOutlined,
@@ -33,30 +33,35 @@ const MainLayout = ({ children }) => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider 
-        width={256}
-        collapsed={collapsed}
-        theme="light"
-        className="min-h-screen"
-      >
-        <div className="p-4">
-          <Button
-            type="text"
-            style={{color:'#000'}}
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            className="w-full text-white mb-4"
-          />
-        </div>
-        <Menu
+      <Affix>
+        <Sider 
+          width={256}
+          collapsed={collapsed}
           theme="light"
-          selectedKeys={[activePath]}
-          mode="inline"
-          items={menuItems}
-          onClick={({ key }) => navigate(key)}
-          inlineCollapsed={collapsed}
-        />
-      </Sider>
+          className="min-h-screen"
+        >
+          <div className="p-4" 
+            style={{transform:'translateX(5px)'}}
+          >
+            <Button
+              
+              type="text"
+              style={{color:'#000'}}
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              className="w-full text-white mb-4"
+            />
+          </div>
+          <Menu
+            theme="light"
+            selectedKeys={[activePath]}
+            mode="inline"
+            items={menuItems}
+            onClick={({ key }) => navigate(key)}
+            inlineCollapsed={collapsed}
+          />
+        </Sider>
+      </Affix>
       <Layout>
         <Content className="m-6 p-6 min-h-[280px]">
           {children}

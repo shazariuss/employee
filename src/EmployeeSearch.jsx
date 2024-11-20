@@ -1,92 +1,201 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Input, Button, Modal, Space, Card, Descriptions, Row, Col } from 'antd';
-import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { Table, Input, Button, Modal, Space, Card, Descriptions } from 'antd';
+import { EditOutlined, DeleteOutlined, EyeOutlined, DownloadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx';
 
 const EmployeeSearch = () => {
-  const SERVER_URL = 'https://employee-api-gold.vercel.app';
-  const [allEmployees, setAllEmployees] = useState([]); 
-  const [filteredEmployees, setFilteredEmployees] = useState([]); 
-  const [filters, setFilters] = useState({
-    full_name: '',
-    email: '',
-    phone_number: '',
-    position_name: '',
-    department_name: '',
-    city: '',
-    employment_type_name: ''
-  });
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [viewModalVisible, setViewModalVisible] = useState(false);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get(`${SERVER_URL}/employees/search?field=full_name&value=`);
-        setAllEmployees(response.data);
-        setFilteredEmployees(response.data);
-      } catch (error) {
-        console.error('Fetch error:', error);
-      }
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const filterEmployees = () => {
-      let results = allEmployees;
-      
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value) {
-          results = results.filter(employee => {
-            const employeeValue = employee[key]?.toString().toLowerCase() || '';
-            return employeeValue.includes(value.toLowerCase());
-          });
+    const SERVER_URL = 'https://employee-api-gold.vercel.app';
+    const [allEmployees, setAllEmployees] = useState([]); 
+    const [filteredEmployees, setFilteredEmployees] = useState([]); 
+    const [filters, setFilters] = useState({
+      full_name: '',
+      email: '',
+      phone_number: '',
+      position_name: '',
+      department_name: '',
+      city: '',
+      employment_type_name: ''
+    });
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [viewModalVisible, setViewModalVisible] = useState(false);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [exportLoading, setExportLoading] = useState(false);
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      async function fetchData() {
+        try {
+          const response = await axios.get(`${SERVER_URL}/employees/search?field=full_name&value=`);
+          setAllEmployees(response.data);
+          setFilteredEmployees(response.data);
+        } catch (error) {
+          console.error('Fetch error:', error);
         }
-      });
-      
-      setFilteredEmployees(results);
+      }
+      fetchData();
+    }, []);
+  
+    useEffect(() => {
+      const filterEmployees = () => {
+        let results = allEmployees;
+        
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value) {
+            results = results.filter(employee => {
+              const employeeValue = employee[key]?.toString().toLowerCase() || '';
+              return employeeValue.includes(value.toLowerCase());
+            });
+          }
+        });
+        
+        setFilteredEmployees(results);
+      };
+  
+      filterEmployees();
+    }, [filters, allEmployees]);
+  
+    const handleView = async (employeeId) => {
+      try {
+        const response = await axios.get(`${SERVER_URL}/employees/${employeeId}`);
+        setSelectedEmployee(response.data);
+        setViewModalVisible(true);
+      } catch (error) {
+        console.error('Error fetching employee details:', error);
+      }
+    };
+  
+    const handleDelete = async () => {
+      try {
+        await axios.delete(`${SERVER_URL}/employees/${selectedEmployee.id}`);
+        setDeleteModalVisible(false);
+        setAllEmployees(allEmployees.filter(emp => emp.id !== selectedEmployee.id));
+        setFilteredEmployees(filteredEmployees.filter(emp => emp.id !== selectedEmployee.id));
+      } catch (error) {
+        console.error('Delete error:', error);
+      }
+    };
+  
+    const handleEdit = (employeeId) => {
+      navigate(`/edit/${employeeId}`);
+    };
+  
+    const handleFilterChange = (field, value) => {
+      setFilters(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    };
+  
+    const handleExportExcel = async () => {
+      setExportLoading(true);
+      try {
+        const employeeDetails = await Promise.all(
+          filteredEmployees.map(async (employee) => {
+            const response = await axios.get(`${SERVER_URL}/employees/${employee.id}`);
+            return response.data;
+          })
+        );
+  
+        const excelData = employeeDetails.map((employee, index) => ({
+          '№': index + 1,
+          'ФИО': employee.full_name,
+          'Должность': employee.position_name,
+          'Отдел': employee.department_name,
+          'Тип занятости': employee.employment_type_name,
+          'Дата рождения': new Date(employee.dob).toLocaleDateString(),
+          'Пол': employee.gender,
+          'Национальность': employee.nationality,
+          'Номер паспорта': employee.passport_number,
+          'Email': employee.email,
+          'Телефон': employee.phone_number,
+          'Страна': employee.country,
+          'Город': employee.city,
+          'Адрес': employee.street_address,
+          'Университет': employee.education?.university,
+          'Степень': employee.education?.degree,
+          'Год выпуска': employee.education?.graduation_year,
+          'Предыдущая компания': employee.experience?.company_name,
+          'Предыдущая должность': employee.experience?.job_title,
+          'Опыт работы (лет)': employee.experience?.years_of_experience,
+          'Экстренный контакт': employee.emergency_contact?.contact_name,
+          'Кем приходится': employee.emergency_contact?.relationship,
+          'Экстренный телефон': employee.emergency_contact?.phone_number
+        }));
+  
+        const worksheet = XLSX.utils.json_to_sheet(excelData);
+  
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Employees');
+  
+        XLSX.writeFile(workbook, `employees_${new Date().toLocaleDateString()}.xlsx`);
+      } catch (error) {
+        console.error('Export error:', error);
+        Modal.error({
+          title: 'Ошибка экспорта',
+          content: 'Произошла ошибка при экспорте данных в Excel.'
+        });
+      } finally {
+        setExportLoading(false);
+      }
     };
 
-    filterEmployees();
-  }, [filters, allEmployees]);
 
-  const handleView = async (employeeId) => {
+  const handleExportSingleEmployee = async (employee) => {
     try {
-      const response = await axios.get(`${SERVER_URL}/employees/${employeeId}`);
-      setSelectedEmployee(response.data);
-      setViewModalVisible(true);
+      const excelData = [{
+        '№': 1,
+        'ФИО': employee.full_name,
+        'Должность': employee.position_name,
+        'Отдел': employee.department_name,
+        'Тип занятости': employee.employment_type_name,
+        'Дата рождения': new Date(employee.dob).toLocaleDateString(),
+        'Пол': employee.gender,
+        'Национальность': employee.nationality,
+        'Номер паспорта': employee.passport_number,
+        'Email': employee.email,
+        'Телефон': employee.phone_number,
+        'Страна': employee.country,
+        'Город': employee.city,
+        'Адрес': employee.street_address,
+        'Университет': employee.education?.university,
+        'Степень': employee.education?.degree,
+        'Год выпуска': employee.education?.graduation_year,
+        'Предыдущая компания': employee.experience?.company_name,
+        'Предыдущая должность': employee.experience?.job_title,
+        'Опыт работы (лет)': employee.experience?.years_of_experience,
+        'Экстренный контакт': employee.emergency_contact?.contact_name,
+        'Кем приходится': employee.emergency_contact?.relationship,
+        'Экстренный телефон': employee.emergency_contact?.phone_number
+      }];
+
+      // Create worksheet
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+      // Create workbook
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Employee Details');
+
+      // Generate Excel file
+      XLSX.writeFile(workbook, `employee_${employee.full_name}_${new Date().toLocaleDateString()}.xlsx`);
     } catch (error) {
-      console.error('Error fetching employee details:', error);
+      console.error('Export error:', error);
+      Modal.error({
+        title: 'Ошибка экспорта',
+        content: 'Произошла ошибка при экспорте данных в Excel.'
+      });
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      await axios.delete(`${SERVER_URL}/employees/${selectedEmployee.id}`);
-      setDeleteModalVisible(false);
-      setAllEmployees(allEmployees.filter(emp => emp.id !== selectedEmployee.id));
-      setFilteredEmployees(filteredEmployees.filter(emp => emp.id !== selectedEmployee.id));
-    } catch (error) {
-      console.error('Delete error:', error);
-    }
-  };
-
-  const handleEdit = (employeeId) => {
-    navigate(`/edit/${employeeId}`);
-  };
-
-  const handleFilterChange = (field, value) => {
-    setFilters(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const columns = [
+   const columns = [
+    {
+      title: '№',
+      key: 'sno',
+      width: '50px',
+      align:'center',
+      render: (text, object, index) =>  index + 1
+    },
     {
       title: (
         <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
@@ -100,6 +209,7 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
+      align:'center',
       dataIndex: 'full_name',
       key: 'full_name',
     },
@@ -116,6 +226,7 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
+      align:'center',
       dataIndex: 'email',
       key: 'email',
     },
@@ -132,6 +243,7 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
+      align:'center',
       dataIndex: 'phone_number',
       key: 'phone_number',
     },
@@ -148,6 +260,7 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
+      align:'center',
       dataIndex: 'position_name',
       key: 'position_name',
     },
@@ -164,6 +277,7 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
+      align:'center',
       dataIndex: 'department_name',
       key: 'department_name',
     },
@@ -180,6 +294,7 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
+      align:'center',
       dataIndex: 'city',
       key: 'city',
     },
@@ -196,6 +311,7 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
+      align:'center',
       dataIndex: 'employment_type_name',
       key: 'employment_type_name',
     },
@@ -203,6 +319,7 @@ const EmployeeSearch = () => {
       title: 'Действия',
       key: 'actions',
       width: 200,
+      align:'center',
       render: (_, record) => (
         <Space>
           <Button
@@ -230,25 +347,56 @@ const EmployeeSearch = () => {
     },
   ];
 
+
   return (
     <div className="p-6">
       <Card>
+        <div className="mb-4 flex justify-end">
+          <Button 
+            type="primary"
+            icon={<DownloadOutlined />}
+            onClick={handleExportExcel}
+            loading={exportLoading}
+            className="ml-auto"
+          >
+            Экспорт в Excel
+          </Button>
+        </div>
+        
         <Table
+          bordered
+          size={'small'}
+          expandable
           columns={columns}
           dataSource={filteredEmployees}
           rowKey="id"
-          pagination={{ pageSize: 10, position:['bottomCenter'] }}
+          pagination={{ pageSize: 20, position:['bottomCenter'] }}
           scroll={{ x: 1300 }}
           className="mt-5"
           rowClassName="custom-row"
+          sticky
         />
 
         <Modal
           title="Информация о сотруднике"
           open={viewModalVisible}
           onCancel={() => setViewModalVisible(false)}
-          footer={null}
+          footer={
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Button
+                type="primary"
+                icon={<DownloadOutlined />}
+                onClick={() => selectedEmployee && handleExportSingleEmployee(selectedEmployee)}
+              >
+                Экспорт в Excel
+              </Button>
+              <Button onClick={() => setViewModalVisible(false)}>
+                Закрыть
+              </Button>
+            </div>
+          }
           width={800}
+          style={{transform:'translateY(-5%)'}}
         >
           {selectedEmployee && (
             <Descriptions column={1} bordered>
