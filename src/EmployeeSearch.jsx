@@ -327,7 +327,7 @@ const EmployeeSearch = () => {
       align:'center',
       render: (_, record) => (
         <Space>
-          <Tooltip title={'Посмотреть'}>
+          <Tooltip title={'View Employee'}>
             <Button
               style={{width:'22px', height:'22px'}}
               icon={<EyeOutlined  style={{fontSize:'14px'}}/>}
@@ -336,7 +336,7 @@ const EmployeeSearch = () => {
               ghost
             />
           </Tooltip>
-          <Tooltip title={'Изменить'}>
+          <Tooltip title={'Edit Employee'}>
             <Button
               style={{width:'22px', height:'22px'}}
               icon={<EditOutlined style={{fontSize:'14px'}} />}
@@ -344,7 +344,7 @@ const EmployeeSearch = () => {
               type="primary"
             />
           </Tooltip>
-          <Tooltip title={'Удалить'}>   
+          <Tooltip title={'Delete Employee'}>   
             <Button
               style={{width:'22px', height:'22px'}}
               icon={<DeleteOutlined style={{fontSize:'14px'}} />}

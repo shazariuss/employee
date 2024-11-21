@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 
 const EditEmployeeForm = () => {
   const SERVER_URL = 'https://employee-api-gold.vercel.app'
@@ -35,6 +35,7 @@ const EditEmployeeForm = () => {
       const currentYear = new Date().getFullYear();
       const newErrors = {};
       const [errors, setErrors] = useState({});
+      const [messageApi, contextHolder] = message.useMessage();
       const [referenceData, setReferenceData] = useState({
         departments: [],
         positions: [],
@@ -344,10 +345,16 @@ const EditEmployeeForm = () => {
             const response = await axios.put(`${SERVER_URL}/employees/${id}`, formData);
             
             if (response.data.success) {
-              alert('Данные сотрудника успешно обновлены');
+              await messageApi.open({
+                type: 'success',
+                content: 'Данные сотрудника успешно обновлены',
+              });
               navigate('/search');
             } else {
-              alert('Произошла ошибка при обновлении данных сотрудника');
+              await messageApi.open({
+                type: 'success',
+                content: 'Произошла ошибка при обновлении данных сотрудника',
+              });
             }
           } catch (error) {
             console.error('Error updating employee:', error);
@@ -359,6 +366,8 @@ const EditEmployeeForm = () => {
       };
 
   return (
+    <>
+      {contextHolder}
       <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg">
       <Button
             type="primary"
@@ -708,6 +717,7 @@ const EditEmployeeForm = () => {
           </button>
         </div>
       </form>
+  </>
   );
 };
 
