@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Input, Button, Modal, Space, Card, Descriptions } from 'antd';
+import { Table, Input, Button, Modal, Space, Card, Descriptions, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined, EyeOutlined, DownloadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -209,9 +209,9 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
-      align:'center',
       dataIndex: 'full_name',
       key: 'full_name',
+      width:'400px'
     },
     {
       title: (
@@ -226,9 +226,9 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
-      align:'center',
       dataIndex: 'email',
       key: 'email',
+      width:400
     },
     {
       title: (
@@ -243,9 +243,10 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
-      align:'center',
       dataIndex: 'phone_number',
       key: 'phone_number',
+      width:'150px'
+
     },
     {
       title: (
@@ -260,9 +261,9 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
-      align:'center',
       dataIndex: 'position_name',
       key: 'position_name',
+      width:'110px'
     },
     {
       title: (
@@ -277,9 +278,10 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
-      align:'center',
       dataIndex: 'department_name',
       key: 'department_name',
+      width:'100px'
+
     },
     {
       title: (
@@ -294,9 +296,10 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
-      align:'center',
       dataIndex: 'city',
       key: 'city',
+      width:'150px'
+
     },
     {
       title: (
@@ -311,37 +314,46 @@ const EmployeeSearch = () => {
           />
         </div>
       ),
-      align:'center',
       dataIndex: 'employment_type_name',
       key: 'employment_type_name',
+      width:'130px'
     },
     {
       title: 'Действия',
       key: 'actions',
-      width: 200,
+      width: 100,
       align:'center',
       render: (_, record) => (
         <Space>
-          <Button
-            icon={<EyeOutlined />}
-            onClick={() => handleView(record.id)}
-            type="primary"
-            ghost
-          />
-          <Button
-            icon={<EditOutlined />}
-            onClick={() => handleEdit(record.id)}
-            type="primary"
-          />
-          <Button
-            icon={<DeleteOutlined />}
-            onClick={() => {
-              setSelectedEmployee(record);
-              setDeleteModalVisible(true);
-            }}
-            type="primary"
-            danger
-          />
+          <Tooltip title={'View Employee'}>
+            <Button
+              style={{width:'22px', height:'22px'}}
+              icon={<EyeOutlined  style={{fontSize:'14px'}}/>}
+              onClick={() => handleView(record.id)}
+              type="primary"
+              ghost
+            />
+          </Tooltip>
+          <Tooltip title={'Edit Employee'}>
+            <Button
+              style={{width:'22px', height:'22px'}}
+              icon={<EditOutlined style={{fontSize:'14px'}} />}
+              onClick={() => handleEdit(record.id)}
+              type="primary"
+            />
+          </Tooltip>
+          <Tooltip title={'Delete Employee'}>   
+            <Button
+              style={{width:'22px', height:'22px'}}
+              icon={<DeleteOutlined style={{fontSize:'14px'}} />}
+              onClick={() => {
+                setSelectedEmployee(record);
+                setDeleteModalVisible(true);
+              }}
+              type="primary"
+              danger
+            />
+          </Tooltip>
         </Space>
       ),
     },

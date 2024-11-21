@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Layout } from 'antd';
+import { Button, Flex, Layout } from 'antd';
 import logo from '/logo.svg';
 import { useNavigate } from 'react-router-dom';
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 
 const { Header: AntHeader } = Layout;
 
@@ -15,39 +16,28 @@ const Header = ({link,text}) => {
         zIndex: 1000,
         width: '100%',
         background: '#fff',
-        padding: '0',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        display:'flex',
+        justifyContent:'end',
+        padding:'0 30px'
       }}
     >
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '0 16px',
-        display: 'flex',
-        alignItems: 'center',
-        height: '100%'
-      }}>
-        <div style={{ flex: 1 }} />
-        
-        <div style={{ 
-          flex: 1, 
-          display: 'flex', 
-          justifyContent: 'center' 
-        }}>
-          <img src={logo} alt="Logo" />
-         
-        </div>
-        
-        <div style={{ 
-          flex: 1, 
-          display: 'flex', 
-          justifyContent: 'flex-end' 
-        }}>
-          <Button type="primary" onClick={() => navigate(`/${link}`)}>
-            {text}
-          </Button>
-        </div>
-      </div>
+        <Flex gap={10} align='center'>
+          <Button
+            style={{borderRadius:'50%'}}
+            type="primary"
+            icon={<UserOutlined />}
+          />
+          
+          <h3>Salimov Shoxrux</h3>
+          <Button
+            style={{borderRadius:'50%'}}
+            type="default"
+            icon={<LogoutOutlined />}
+          />
+          
+        </Flex>          
+
     </AntHeader>
   );
 };

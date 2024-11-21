@@ -7,6 +7,7 @@ import {
   MenuUnfoldOutlined
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Header from './Header';
 
 const { Sider, Content } = Layout;
 
@@ -33,8 +34,10 @@ const MainLayout = ({ children }) => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
+      <Header/>
       <Affix>
         <Sider 
+          style={{marginTop:'70px'}}
           width={256}
           collapsed={collapsed}
           theme="light"
@@ -63,7 +66,7 @@ const MainLayout = ({ children }) => {
         </Sider>
       </Affix>
       <Layout>
-        <Content className="m-6 p-6 min-h-[280px]">
+        <Content className="mt-12 min-h-[280px]">
           {children}
         </Content>
       </Layout>
