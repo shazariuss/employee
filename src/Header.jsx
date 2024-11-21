@@ -13,7 +13,7 @@ const Header = ({link,text}) => {
       style={{ 
         position: 'fixed',
         top: 0,
-        zIndex: 1000,
+        zIndex: 4,
         width: '100%',
         background: '#fff',
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',

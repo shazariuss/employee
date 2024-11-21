@@ -37,7 +37,7 @@ const MainLayout = ({ children }) => {
       <Header/>
       <Affix>
         <Sider 
-          style={{marginTop:'70px'}}
+          style={{marginTop:'0',zIndex:6}}
           width={256}
           collapsed={collapsed}
           theme="light"

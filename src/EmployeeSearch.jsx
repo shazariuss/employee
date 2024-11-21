@@ -211,7 +211,8 @@ const EmployeeSearch = () => {
       ),
       dataIndex: 'full_name',
       key: 'full_name',
-      width:'400px'
+      width:250,
+      ellipsis:true
     },
     {
       title: (
@@ -228,7 +229,8 @@ const EmployeeSearch = () => {
       ),
       dataIndex: 'email',
       key: 'email',
-      width:400
+      width:250,
+      ellipsis:true
     },
     {
       title: (
@@ -361,8 +363,8 @@ const EmployeeSearch = () => {
 
 
   return (
-    <div className="p-6">
-      <Card>
+    <div className="p-6  h-full" >
+      <Card className=' h-full'>
         <div className="mb-4 flex justify-end">
           <Button 
             type="primary"
@@ -382,7 +384,7 @@ const EmployeeSearch = () => {
           columns={columns}
           dataSource={filteredEmployees}
           rowKey="id"
-          pagination={{ pageSize: 20, position:['bottomCenter'] }}
+          pagination={{ pageSize: 15, position:['bottomCenter'] }}
           scroll={{ x: 1300 }}
           className="mt-5"
           rowClassName="custom-row"
