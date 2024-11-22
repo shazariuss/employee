@@ -21,7 +21,7 @@ const MainLayout = ({ children }) => {
 
   const menuItems = [
     {
-      key: '/',
+      key: '/registerForm',
       icon: <UserAddOutlined />,
       label: 'Регистрация',
     },
