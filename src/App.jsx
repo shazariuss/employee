@@ -5,13 +5,15 @@ import EmployeeForm from './EmployeeForm';
 import EmployeeSearch from './EmployeeSearch';
 import EditEmployeeForm from './EditEmployeeForm';
 import './index.css';
+import EmployeeDashboard from './EmployeeDashboard';
 
 function App() {
   return (
     <Router>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<EmployeeForm />} />
+          <Route path="/" element={<EmployeeDashboard />} />
+          <Route path="/registerForm" element={<EmployeeForm />} />
           <Route path="/search" element={<EmployeeSearch />} />
           <Route path="/edit/:id" element={<EditEmployeeForm />} />
         </Routes>
