@@ -1,6 +1,5 @@
 import React, { useState, useEffect, } from 'react';
 import axios from 'axios';
-import Header from './Header';
 
 const EmployeeForm = () => {
   const SERVER_URL = 'https://employee-api-gold.vercel.app'

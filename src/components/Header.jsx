@@ -3,11 +3,15 @@ import { Button, Flex, Layout } from 'antd';
 import logo from '/logo.svg';
 import { useNavigate } from 'react-router-dom';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { useAuth } from '../context/AuthContext';
 
 const { Header: AntHeader } = Layout;
 
 const Header = ({link,text}) => {
+    const { user } = useAuth()
     const navigate = useNavigate()
+    console.log(user);
+    
   return (
     <AntHeader 
       style={{ 
@@ -29,7 +33,7 @@ const Header = ({link,text}) => {
             icon={<UserOutlined />}
           />
           
-          <h3>Salimov Shoxrux</h3>
+          <h3>{user.username}</h3>
           <Button
             style={{borderRadius:'50%'}}
             type="default"

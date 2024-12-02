@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext'
 
-const Register = () => {
+const Login = () => {
     const [formData, setFormData] = useState({
-        username: '',
         email: '',
         password: ''
     });
     const [error, setError] = useState('');
+    const { login } = useAuth()
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -21,12 +22,15 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/auth/register', formData);
+            const response = await axios.post('http://localhost:5000/auth/login', formData);
             localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
+            // localStorage.setItem('user', JSON.stringify(response.data.user));
+            
+            login(response.data.token)
             navigate('/');
         } catch (error) {
-            setError(error.response?.data?.error || 'Registration failed');
+            setError(error.response?.data?.error || 'Login failed');
+            navigate('/register')
         }
     };
 
@@ -35,7 +39,7 @@ const Register = () => {
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        Create your account
+                        Sign in to your account
                     </h2>
                 </div>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -47,21 +51,10 @@ const Register = () => {
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
                             <input
-                                name="username"
-                                type="text"
-                                required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                placeholder="Username"
-                                value={formData.username}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div>
-                            <input
                                 name="email"
                                 type="email"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Email address"
                                 value={formData.email}
                                 onChange={handleChange}
@@ -85,7 +78,7 @@ const Register = () => {
                             type="submit"
                             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                            Register
+                            Sign in
                         </button>
                     </div>
                 </form>
@@ -94,4 +87,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default Login;
