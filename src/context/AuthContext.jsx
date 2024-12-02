@@ -7,7 +7,6 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Check token on initial load
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -19,7 +18,6 @@ export const AuthProvider = ({ children }) => {
           role: decoded.role
         });
       } catch (error) {
-        // Invalid token
         localStorage.removeItem('token');
       }
     }
