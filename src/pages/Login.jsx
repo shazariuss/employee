@@ -1,36 +1,39 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import { authService } from "../services/api";
 
 const Login = () => {
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
+        email: "",
+        password: "",
     });
-    const [error, setError] = useState('');
-    const { login } = useAuth()
+    const [error, setError] = useState("");
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://employee-api-gold.vercel.app/auth/login', formData);
-            localStorage.setItem('token', response.data.token);
-            // localStorage.setItem('user', JSON.stringify(response.data.user));
-            
-            login(response.data.token)
-            navigate('/');
+            const response = await authService.login(
+                formData.email,
+                formData.password
+            );
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+
+            login(response.data.token);
+            navigate("/");
         } catch (error) {
-            setError(error.response?.data?.error || 'Login failed');
-            navigate('/register')
+            setError(error.response?.data?.error || "Login failed");
         }
     };
 
@@ -44,7 +47,10 @@ const Login = () => {
                 </div>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <div
+                            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                            role="alert"
+                        >
                             <span className="block sm:inline">{error}</span>
                         </div>
                     )}

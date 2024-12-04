@@ -1,20 +1,24 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import MainLayout from './components/MainLayout';
-import EmployeeForm from './pages/EmployeeForm';
-import EmployeeSearch from './pages/EmployeeSearch';
-import EditEmployeeForm from './pages/EditEmployeeForm';
-import EmployeeDashboard from './pages/EmployeeDashboard';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import PrivateRoute from './components/PrivateRoute';
-import './index.css';
-import { AuthProvider } from './context/AuthContext';
-
+import React from "react";
+import {
+    BrowserRouter as Router,
+    Route,
+    Routes,
+    Navigate,
+} from "react-router-dom";
+import MainLayout from "./components/MainLayout";
+import EmployeeForm from "./pages/EmployeeForm";
+import EmployeeSearch from "./pages/EmployeeSearch";
+import EditEmployeeForm from "./pages/EditEmployeeForm";
+import EmployeeDashboard from "./pages/EmployeeDashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import PrivateRoute from "./components/PrivateRoute";
+import { AuthProvider } from "./context/AuthContext";
+import "./index.css";
 
 function App() {
     return (
-        <AuthProvider>     
+        <AuthProvider>
             <Router>
                 <Routes>
                     <Route path="/login" element={<Login />} />
@@ -42,7 +46,7 @@ function App() {
                     <Route
                         path="/search"
                         element={
-                            <PrivateRoute>
+                            <PrivateRoute requiredRoles={["admin"]}>
                                 <MainLayout>
                                     <EmployeeSearch />
                                 </MainLayout>
@@ -59,6 +63,7 @@ function App() {
                             </PrivateRoute>
                         }
                     />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Router>
         </AuthProvider>

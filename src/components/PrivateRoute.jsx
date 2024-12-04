@@ -1,21 +1,24 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const PrivateRoute = ({ children, requiredRoles = [] }) => {
-  const { user } = useAuth();
+    const { user, isLoading } = useAuth();
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
-  // If requiredRoles is empty, any authenticated user can access
-  if (requiredRoles.length === 0 || requiredRoles.includes(user.role)) {
-    return children;
-  }
+    if (!user) {
+        return <Navigate to="/login" replace />;
+    }
 
-  // Unauthorized
-  return <Navigate to="/register" replace />;
+    if (requiredRoles.length === 0 || requiredRoles.includes(user.role)) {
+        return children;
+    }
+
+    // Unauthorized
+    return <Navigate to="/unauthorized" replace />;
 };
 
 export default PrivateRoute;
